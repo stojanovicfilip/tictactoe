@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
@@ -27,16 +28,13 @@ socketio.on('connection', (socket) => {
       const roomId = room._id.toString();
       socket.join(roomId);
       socketio.to(roomId).emit('createRoomSuccess', room);
-      console.log('Success');
     } catch (error) {
       socketio.emit('createRoomError');
-      console.log('Error');
     }
   });
 });
 
-const DB =
-  'mongodb+srv://filip:test1234@cluster0.scyid.mongodb.net/?retryWrites=true&w=majority';
+const DB = `mongodb+srv://${process.env.MONGODB}@cluster0.scyid.mongodb.net/?retryWrites=true&w=majority`;
 
 mongoose
   .connect(DB)
