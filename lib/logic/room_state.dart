@@ -4,32 +4,28 @@ abstract class RoomState extends Equatable {
   const RoomState();
 }
 
-class CreateRoomInitialState extends RoomState {
-  const CreateRoomInitialState();
+class RoomInitialState extends RoomState {
+  final String? errorMessage;
+  final bool showCreateRoom;
 
-  @override
-  List<Object?> get props => [];
-}
-
-class CreateRoomLoadingState extends RoomState {
-  const CreateRoomLoadingState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class CreateRoomErrorState extends RoomState {
-  final String errorMessage;
-  const CreateRoomErrorState({
-    required this.errorMessage,
+  const RoomInitialState({
+    this.errorMessage,
+    this.showCreateRoom = true,
   });
 
   @override
+  List<Object?> get props => [errorMessage, showCreateRoom];
+}
+
+class RoomLoadingState extends RoomState {
+  const RoomLoadingState();
+
+  @override
   List<Object?> get props => [];
 }
 
-class CreateRoomSuccessState extends RoomState {
-  const CreateRoomSuccessState();
+class WaitingRoomState extends RoomState {
+  const WaitingRoomState();
 
   @override
   List<Object?> get props => [];

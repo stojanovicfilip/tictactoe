@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tictactoe/logic/menu_bloc.dart';
 import 'package:tictactoe/logic/menu_state.dart';
 import 'package:tictactoe/logic/room_bloc.dart';
-import 'package:tictactoe/logic/room_event.dart';
 import 'package:tictactoe/routes.dart';
 import 'package:tictactoe/view/constants/transitions.dart';
 import 'package:tictactoe/view/screens/room_screen.dart';
@@ -32,9 +31,6 @@ class _MenuScreenState extends State<MenuScreen> {
       body: BlocConsumer<MenuBloc, MenuState>(
         listener: (_, __) {},
         builder: (BuildContext context, MenuState state) {
-          if (state is HomeLoadingState) {
-            return const Center(child: CircularProgressIndicator());
-          }
           return SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
@@ -45,7 +41,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width / 2,
                   child: CustomButton(
-                    text: 'Create new room',
+                    text: 'Play',
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -54,20 +50,10 @@ class _MenuScreenState extends State<MenuScreen> {
                             create: (context) => RoomBloc(),
                             child: const RoomScreen(),
                           ),
-                          begin: const Offset(0, 1),
+                          begin: const Offset(1, 0),
                           end: const Offset(0, 0),
                         ),
                       );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 10.0),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 2,
-                  child: CustomButton(
-                    text: 'Join a room',
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.join);
                     },
                   ),
                 ),
@@ -86,9 +72,7 @@ class _MenuScreenState extends State<MenuScreen> {
                   width: MediaQuery.of(context).size.width / 2,
                   child: CustomButton(
                     text: 'Quit',
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.login);
-                    },
+                    onPressed: () {},
                   ),
                 ),
               ],

@@ -4,17 +4,19 @@ const playerSchema = new mongoose.Schema({
   username: {
     type: String,
     trim: true,
+    required: true,
   },
   socketID: {
     type: String,
+    required: true,
   },
   points: {
     type: Number,
     default: 0,
   },
   playerType: {
-    required: true,
     type: String,
+    required: true,
   },
 });
 
