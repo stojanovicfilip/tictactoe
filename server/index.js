@@ -41,7 +41,7 @@ socketio.on('connection', (socket) => {
       }
       let room = await Room.findById(roomId);
 
-      if (room.isAvailable) {
+      if (room.is_available) {
         let player = {
           socketID: socket.id,
           username,

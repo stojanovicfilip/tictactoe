@@ -38,4 +38,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   ) {
     unawaited(_authRepository.logout());
   }
+
+  @override
+  Future<void> close() {
+    _authSubscription?.cancel();
+    return super.close();
+  }
 }

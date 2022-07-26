@@ -39,6 +39,7 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
+            routes: Routes.routes,
             home: FlowBuilder(
                 state: context.select((AppBloc bloc) => bloc.state.status),
                 onGeneratePages: (AuthStatus state, List<Page<dynamic>> pages) {

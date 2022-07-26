@@ -37,6 +37,9 @@ node_modules/
 # Web related
 lib/generated_plugin_registrant.dart
 
+# Sensitive
+GoogleService-Info.plist
+
 # Symbolication related
 app.*.symbols
 
