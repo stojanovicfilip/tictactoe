@@ -3,7 +3,6 @@ const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
 const Room = require('./models/room');
-const Player = require('./models/player');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -31,7 +30,33 @@ socketio.on('connection', (socket) => {
       socket.join(roomId);
       socketio.to(roomId).emit('roomCreationResolution', room);
     } catch (error) {
-      socketio.to(socket.id).emit('roomCreationResolution', null);
+      socket.emit('errorOccured', 'Room creation failed');
+    }
+  });
+  socket.on('joinRoom', async ({ roomId, username }) => {
+    try {
+      if (!roomId.match(/^[0-9a-fA-F]{24}/)) {
+        socket.emit('errorOccured', 'Please enter a valid room ID');
+        return;
+      }
+      let room = await Room.findById(roomId);
+
+      if (room.isAvailable) {
+        let player = {
+          socketID: socket.id,
+          username,
+          playerType: 'O',
+        };
+        socket.join(roomId);
+        room.players.push(player);
+        room = await room.save();
+        socketio.to(roomId).emit('playerJoinedRoom', room);
+        socketio.to(roomId).emit('gameStart', room);
+      } else {
+        socket.emit('errorOccured', 'Room is full');
+      }
+    } catch (error) {
+      console.log(error);
     }
   });
 });

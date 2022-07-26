@@ -7,7 +7,14 @@ import 'package:tictactoe/data/models/room.dart';
 class SocketClient {
   late io.Socket socket;
   static SocketClient? _instance;
-  final StreamController createRoomStream = StreamController.broadcast();
+  final StreamController createRoomController = StreamController.broadcast();
+  final StreamController joinRoomController = StreamController.broadcast();
+  final StreamController gameStartController = StreamController.broadcast();
+
+  static SocketClient? get instance {
+    _instance ??= SocketClient._internal();
+    return _instance;
+  }
 
   SocketClient._internal() {
     socket = io.io('http://192.168.1.2:3000', <String, dynamic>{
@@ -17,14 +24,16 @@ class SocketClient {
 
     socket.connect();
 
+    // Listeners
     socket.on('roomCreationResolution', (data) {
-      createRoomStream.sink.add(data);
+      createRoomController.sink.add(data);
     });
-  }
-
-  static SocketClient? get instance {
-    _instance ??= SocketClient._internal();
-    return _instance;
+    socket.on('playerJoinedRoom', (data) {
+      joinRoomController.sink.add(data);
+    });
+    socket.on('gameStart', (data) {
+      gameStartController.sink.add(data);
+    });
   }
 
   // Emitters
@@ -34,8 +43,30 @@ class SocketClient {
     });
   }
 
-  Future<RoomModel?> roomCreationResolution(Stream source) async {
-    await for (dynamic data in source) {
+  void joinRoom(String roomId, String username) {
+    socket.emit('joinRoom', {
+      'roomId': roomId,
+      'username': username,
+    });
+  }
+
+  // Adapters
+  Future<RoomModel?> roomCreateOrJoinEvent(Stream source) async {
+    await for (var data in source) {
+      final List<PlayerModel> players = [];
+      for (var i = 0; i < data['players'].length; i++) {
+        players.add(PlayerModel.fromMap(data['players'][i]));
+      }
+      final PlayerModel player = PlayerModel.fromMap(data['turn']);
+      final RoomModel room = RoomModel.fromMap(data, [], player);
+      return room;
+    }
+    return null;
+  }
+
+  // Adapters
+  Future<RoomModel?> gameStartEvent(Stream source) async {
+    await for (var data in source) {
       final List<PlayerModel> players = [];
       for (var i = 0; i < data['players'].length; i++) {
         players.add(PlayerModel.fromMap(data['players'][i]));

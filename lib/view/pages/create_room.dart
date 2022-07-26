@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tictactoe/logic/room_bloc.dart';
-import 'package:tictactoe/logic/room_event.dart';
-import 'package:tictactoe/logic/room_state.dart';
+import 'package:tictactoe/logic/bloc/room_bloc.dart';
+import 'package:tictactoe/logic/bloc/room_event.dart' as event;
+import 'package:tictactoe/logic/bloc/room_state.dart';
 import 'package:tictactoe/view/widgets/button.dart';
 
 class CreateRoom extends StatefulWidget {
@@ -52,7 +52,7 @@ class _CreateRoomState extends State<CreateRoom> {
                 child: CustomButton(
                   text: 'Create',
                   onPressed: () {
-                    _bloc.add(CreateNewRoom(username: _username.text));
+                    _bloc.add(event.CreateRoom(username: _username.text));
                   },
                 ),
               ),

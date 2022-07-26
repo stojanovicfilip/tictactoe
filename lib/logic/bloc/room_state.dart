@@ -30,3 +30,10 @@ class WaitingRoomState extends RoomState {
   @override
   List<Object?> get props => [];
 }
+
+class GameReadyState extends RoomState {
+  const GameReadyState();
+
+  @override
+  List<Object?> get props => [];
+}

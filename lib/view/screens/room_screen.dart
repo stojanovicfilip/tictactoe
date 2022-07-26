@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tictactoe/logic/room_bloc.dart';
-import 'package:tictactoe/logic/room_event.dart';
-import 'package:tictactoe/logic/room_state.dart';
-import 'package:tictactoe/view/pages/create_room.dart';
-import 'package:tictactoe/view/pages/join_room.dart';
+import 'package:tictactoe/logic/bloc/room_bloc.dart';
+import 'package:tictactoe/logic/bloc/room_event.dart';
+import 'package:tictactoe/logic/bloc/room_state.dart';
+import 'package:tictactoe/view/pages/create_room.dart' as screen;
+import 'package:tictactoe/view/pages/join_room.dart' as screen;
 import 'package:tictactoe/view/pages/waiting_room.dart';
+import 'package:tictactoe/view/screens/game_screen.dart';
 
 class RoomScreen extends StatefulWidget {
   const RoomScreen({Key? key}) : super(key: key);
@@ -34,6 +35,16 @@ class _RoomScreenState extends State<RoomScreen> {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(state.errorMessage!)));
             }
+          }
+          if (state is GameReadyState) {
+            // TODO: pass bloc value
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return const GameScreen();
+                },
+              ),
+            );
           }
         },
         builder: (BuildContext context, RoomState state) {
@@ -68,8 +79,8 @@ class _RoomScreenState extends State<RoomScreen> {
                     ],
                   ),
                   state.showCreateRoom
-                      ? const Expanded(child: CreateRoom())
-                      : const Expanded(child: JoinRoom()),
+                      ? const Expanded(child: screen.CreateRoom())
+                      : const Expanded(child: screen.JoinRoom()),
                 ],
               ),
             );

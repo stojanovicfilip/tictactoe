@@ -15,13 +15,33 @@ class SwitchRoomPage extends RoomEvent {
   List<Object?> get props => [showCreateRoom];
 }
 
-class CreateNewRoom extends RoomEvent {
+class CreateRoom extends RoomEvent {
   final String username;
 
-  const CreateNewRoom({
+  const CreateRoom({
     required this.username,
   });
 
   @override
   List<Object?> get props => [username];
+}
+
+class JoinRoom extends RoomEvent {
+  final String roomId;
+  final String username;
+
+  const JoinRoom({
+    required this.roomId,
+    required this.username,
+  });
+
+  @override
+  List<Object?> get props => [roomId, username];
+}
+
+class WaitingTimer extends RoomEvent {
+  const WaitingTimer();
+
+  @override
+  List<Object?> get props => [];
 }

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
-const playerSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    trim: true,
+    required: true,
+  },
   username: {
     type: String,
     trim: true,
@@ -10,14 +15,14 @@ const playerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  points: {
+  xp: {
     type: Number,
     default: 0,
   },
-  playerType: {
-    type: String,
-    required: true,
-  },
+  friends: [String],
+  rooms: [String],
 });
 
-module.exports = playerSchema;
+const userModel = mongoose.model('User', userSchema);
+
+module.exports = userModel;

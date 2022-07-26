@@ -1,30 +1,21 @@
 const mongoose = require('mongoose');
-const playerSchema = require('./player.js');
+const gameSchema = require('./game');
 
 const roomSchema = new mongoose.Schema({
-  occupancy: {
-    type: Number,
-    default: 2,
-  },
-  maxRounds: {
-    type: Number,
-    default: 20,
-  },
-  currentRound: {
-    required: true,
-    type: Number,
-    default: 1,
-  },
-  players: [playerSchema],
-  isAvailable: {
+  is_available: {
     type: Boolean,
     default: true,
   },
-  turn: playerSchema,
-  turnIndex: {
-    type: Number,
-    default: 0,
+  available_until: {
+    type: Date,
+    default: () => Date.now() + 3 * 60 * 60 * 1000,
   },
+  last_modified: {
+    type: Date,
+    default: Date.now,
+  },
+  games: [gameSchema],
+  players: [String],
 });
 
 const roomModel = mongoose.model('Room', roomSchema);
